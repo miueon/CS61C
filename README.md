@@ -1,3 +1,5 @@
-# su20-proj1-starter
+# CS61CPU
 
-Please add a description about what you created! Also add lessons you learned or bugs you encountered. 
+Look ma, I made a CPU! Here's what I did:
+
+-
