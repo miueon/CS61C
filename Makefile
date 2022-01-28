@@ -1,26 +1,29 @@
 CC = gcc
-CFLAGS = -g -Wall -std=c99 -c
-LDFLAGS = -g -Wall
+CFLAGS = -g -Wall -std=c99 -fopenmp -mavx -mfma -pthread
+LDFLAGS = -fopenmp
+CUNIT = -L/home/ff/cs61c/cunit/install/lib -I/home/ff/cs61c/cunit/install/include -lcunit
+PYTHON = -I/usr/include/python3.6 -lpython3.6m
 
-.PHONY : all test clean
+install:
+	if [ ! -f files.txt ]; then touch files.txt; fi
+	rm -rf build
+	xargs rm -rf < files.txt
+	python3 setup.py install --record files.txt
 
-all : philspel
+uninstall:
+	if [ ! -f files.txt ]; then touch files.txt; fi
+	rm -rf build
+	xargs rm -rf < files.txt
 
-philspel : philspel.o hashtable.o
-	$(CC) $(LDFLAGS) -o philspel philspel.o hashtable.o
+clean:
+	rm -f *.o
+	rm -f test
+	rm -rf build
+	rm -rf __pycache__
 
-philspel.o : philspel.c philspel.h hashtable.h
-	$(CC) $(CFLAGS) philspel.c
+test:
+	rm -f test
+	$(CC) $(CFLAGS) mat_test.c matrix.c -o test $(LDFLAGS) $(CUNIT) $(PYTHON)
+	./test
 
-hashtable.o : hashtable.c hashtable.h
-	$(CC) $(CFLAGS) hashtable.c
-
-clean :
-	rm -f *.o philspel testOutput
-
-test : clean philspel
-	touch testOutput
-	cat sampleInput | ./philspel sampleDictionary > testOutput
-	@echo The following should be empty if there are no problems
-	diff sampleOutput testOutput 2> /dev/null
-	@echo Testing complete
+.PHONY: test

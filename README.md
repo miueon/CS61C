@@ -1,3 +1,4 @@
-# su20-proj1-starter
+# numc
 
-Please add a description about what you created! Also add lessons you learned or bugs you encountered. 
+Here's what I did in project 4:
+-
