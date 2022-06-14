@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "*.rkt": "racket",
+        "array": "c",
+        "*.tcc": "c",
+        "string": "c",
+        "vector": "c",
+        "string_view": "c",
+        "functional": "c",
+        "istream": "c",
+        "limits": "c",
+        "ostream": "c",
+        "sstream": "c",
+        "streambuf": "c",
+        "typeinfo": "c",
+        "hashtable.h": "c"
+    }
+}
