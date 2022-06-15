@@ -144,9 +144,86 @@ void readDictionary(char *dictName) {
   }
 }
 
+void clearBuffer(char *buffer) { buffer[0] = '\0'; }
+int isBufferEmpty(char *buffer) { return buffer[0] == '\0'; }
+char *variation2(char *buffer) {
+  int bufferSize = strlen(buffer);
+  char *v2 = malloc((bufferSize + 1) * sizeof(char));
+  v2[0] = buffer[0];
+  v2[bufferSize] = '\0';
+  for (size_t i = 1; buffer[i] != '\0'; i++) {
+    if (buffer[i] >= 'A' && buffer[i] <= 'Z') {
+      v2[i] = tolower(buffer[i]);
+      continue;
+    }
+    v2[i] = buffer[i];
+  }
+
+  return v2;
+}
+
+char *variation3(char *buffer) {
+  char *v3 = variation2(buffer);
+  if (v3[0] >= 'A' && v3[0] <= 'Z') {
+    v3[0] += 32;
+  }
+  return v3;
+}
 /* Task 4 */
 void processInput() {
   // -- TODO --
   // fprintf(stderr, "You need to implement processInput\n");
-  
+  int input;
+  char ch;
+  char buffer[1000];
+  buffer[0] = '\0';
+  int bufferIndex = 0;
+  char *output = NULL;
+  int outputted = 0;
+
+  while ((input = getchar()) != EOF || !isBufferEmpty(buffer)) {
+    ch = input;
+    if (!allowedKeyChar(ch)) {
+      if (!isBufferEmpty(buffer)) {
+        buffer[bufferIndex] = '\0';
+        // variation1
+        output = findData(dictionary, buffer);
+        outputted = 0;
+        if (output != NULL) {
+          printf("%s", output);
+          outputted = 1;
+        }
+
+        // variation2
+        char *v2 = variation2(buffer);
+        output = findData(dictionary, v2);
+        if (output != NULL && !outputted) {
+          printf("%s", output);
+          outputted = 1;
+          free(v2);
+        }
+
+        char *v3 = variation3(buffer);
+        output = findData(dictionary, v3);
+        if (output != NULL && !outputted) {
+          printf("%s", output);
+          outputted = 1;
+          free(v3);
+        }
+        if (!outputted) {
+          printf("%s", buffer);
+        }
+      }
+      if (input != EOF) {
+        printf("%c", ch);
+      }
+
+      clearBuffer(buffer);
+      bufferIndex = 0;
+      continue;
+    }
+
+    buffer[bufferIndex] = ch;
+    bufferIndex += 1;
+  }
 }

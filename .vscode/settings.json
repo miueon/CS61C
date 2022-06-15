@@ -13,6 +13,7 @@
         "sstream": "c",
         "streambuf": "c",
         "typeinfo": "c",
-        "hashtable.h": "c"
+        "hashtable.h": "c",
+        "stdio.h": "c"
     }
 }
