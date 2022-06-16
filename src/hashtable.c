@@ -53,7 +53,7 @@ void insertData(HashTable *table, void *key, void *data) {
   newBucket->key = key;
   newBucket->data = data;
   struct HashBucketEntry *entry = table->buckets[index];
-
+  struct HashBucketEntry *last = entry;
 
   if (entry == NULL) {
     table->buckets[index] = newBucket;
@@ -66,9 +66,11 @@ void insertData(HashTable *table, void *key, void *data) {
       free(newBucket);
       return;
     }
-  } while (entry->next != NULL);
+    last = entry;
+    entry = entry->next;
+  } while (entry != NULL);
 
-  entry->next = newBucket;
+  last->next = newBucket;
   return;
 }
 
@@ -84,6 +86,7 @@ void *findData(HashTable *table, void *key) {
     if (table->equalFunction(key, entry->key)) {
       return entry->data;
     }
+    entry = entry->next;
   }
   return NULL;
 }

@@ -28,6 +28,7 @@
  */
 #include <string.h>
 
+#include <time.h>
 /*
  * This hash table stores the dictionary.
  */
@@ -134,13 +135,18 @@ void readDictionary(char *dictName) {
     if (isEmpty(line)) {
       continue;
     }
+
     char *base = stripFirst(line);
     int keySize = getKeySize(base);
     char *key = getWord(base, keySize);
+    key[keySize] = '\0';
+
     base = stripFirst(base + keySize);
     int dataSize = getDataSize(base);
     char *data = getWord(base, dataSize);
+    data[dataSize] = '\0';
     insertData(dictionary, key, data);
+
   }
 }
 
@@ -175,12 +181,12 @@ void processInput() {
   // fprintf(stderr, "You need to implement processInput\n");
   int input;
   char ch;
-  char buffer[1000];
+  int bufferSize = 1000;
+  char *buffer = malloc(bufferSize * sizeof(char));
   buffer[0] = '\0';
   int bufferIndex = 0;
   char *output = NULL;
   int outputted = 0;
-
   while ((input = getchar()) != EOF || !isBufferEmpty(buffer)) {
     ch = input;
     if (!allowedKeyChar(ch)) {
@@ -225,5 +231,13 @@ void processInput() {
 
     buffer[bufferIndex] = ch;
     bufferIndex += 1;
+
+    if (bufferIndex == bufferSize) {
+      bufferSize <<= 1;
+      char *newBuffer = malloc(bufferSize * sizeof(char));
+      strncpy(newBuffer, buffer, bufferIndex);
+      free(buffer);
+      buffer = newBuffer;
+    }
   }
 }
