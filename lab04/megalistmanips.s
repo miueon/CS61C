@@ -61,6 +61,10 @@ map:
     # - 4 for the array pointer
     # - 4 for the size of the array
     # - 4 more for the pointer to the next node
+
+    # also keep in mind that we should not make ANY assumption on which registers
+    # are modified by the callees, even when we know the content inside the functions 
+    # we call. this is to enforce the abstraction barrier of calling convention.
 mapLoop:
     add t1, s0, x0      # load the address of the array of current node into t1
     lw t2, 4(s0)        # load the size of the node's array into t2
@@ -83,6 +87,11 @@ done:
     lw s1, 4(sp)
     lw ra, 0(sp)
     addi sp, sp, 12
+
+print_newline:
+    li a1, '\n'
+    li a0, 11
+    ecall
     jr ra
 
 mystery:
@@ -91,8 +100,13 @@ mystery:
     jr ra
 
 create_default_list:
-    addi sp, sp, -4
+    addi sp, sp, -24
     sw ra, 0(sp)
+    sw s0, 4(sp)
+    sw s1, 8(sp)
+    sw s2, 12(sp)
+    sw s3, 16(sp)
+    sw s4, 20(sp)
     li s0, 0  # pointer to the last node we handled
     li s1, 0  # number of nodes handled
     li s2, 5  # size
@@ -119,7 +133,12 @@ loop: #do...
     bne s1, t6, loop # ... while i!= 5
     mv a0, s4
     lw ra, 0(sp)
-    addi sp, sp, 4
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    lw s2, 12(sp)
+    lw s3, 16(sp)
+    lw s4, 20(sp)
+    addi sp, sp, 24
     jr ra
 
 fillArray: lw t0, 0(a1) #t0 gets array element
@@ -158,12 +177,6 @@ printLoop:
     ecall
     lw a0, 8(t0) # a0 gets address of next node
     j print_list # recurse. We don't have to use jal because we already have where we want to return to in ra
-
-print_newline:
-    li a1, '\n'
-    li a0, 11
-    ecall
-    jr ra
 
 malloc:
     mv a1, a0 # Move a0 into a1 so that we can do the syscall correctly
