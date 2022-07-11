@@ -11,11 +11,11 @@
 #   a4 (int)  is the stride of v1
 # Returns:
 #   a0 (int)  is the dot product of v0 and v1
-#
-# If the length of the vector is less than 1, 
-# this function exits with error code 5.
-# If the stride of either vector is less than 1,
-# this function exits with error code 6.
+# Exceptions:
+# - If the length of the vector is less than 1,
+#   this function terminates the program with error code 57
+# - If the stride of either vector is less than 1,
+#   this function terminates the program with error code 58
 # =======================================================
 dot:
 
@@ -40,5 +40,5 @@ loop_end:
 
     # Epilogue
 
-    
+
     ret

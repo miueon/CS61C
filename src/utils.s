@@ -1,3 +1,7 @@
+##############################################################
+# Do not modify! (But feel free to use the functions provided)
+##############################################################
+
 #define c_print_int 1
 #define c_print_str 4
 #define c_atoi 5
@@ -19,6 +23,9 @@
 
 # helper functions
 .globl file_error, print_int_array, malloc, free, print_num_alloc_blocks, num_alloc_blocks
+
+# unittest helper functions
+.globl compare_int_array
 
 .data
 error_string: .string "This library file should not be directly called!"
@@ -67,7 +74,7 @@ print_str:
 # args:
 #   a1 = address of the string you want to turn into an integer.
 # return:
-#   a0 = Integer representation of string 
+#   a0 = Integer representation of string
 #================================================================
 atoi:
     li a0 c_atoi
@@ -128,6 +135,7 @@ print_char:
 fopen:
     li a0 c_openFile
     ecall
+    #FOPEN_RETURN_HOOK
     ret
 
 
@@ -144,6 +152,7 @@ fopen:
 fread:
     li a0 c_readFile
     ecall
+    #FREAD_RETURN_HOOK
     ret
 
 
@@ -162,6 +171,7 @@ fread:
 fwrite:
     li a0 c_writeFile
     ecall
+    #FWRITE_RETURN_HOOK
     ret
 
 
@@ -176,6 +186,7 @@ fwrite:
 fclose:
     li a0 c_closeFile
     ecall
+    #FCLOSE_RETURN_HOOK
     ret
 
 
@@ -251,6 +262,7 @@ malloc:
     li a0 0x3CC
     addi a6 x0 1
     ecall
+    #MALLOC_RETURN_HOOK
     ret
 
 
@@ -338,8 +350,8 @@ inner_loop_start:
     beq s4 s2 inner_loop_end
 
     # t0 = row index * len(row) + column index
-    mul t0 s2 s3 
-    add t0 t0 s4 
+    mul t0 s2 s3
+    add t0 t0 s4
     slli t0 t0 2
 
     # Load matrix element
@@ -353,7 +365,7 @@ inner_loop_start:
     # Print whitespace
     li a1 ' '
     jal print_char
-    
+
 
     addi s4 s4 1
     j inner_loop_start
@@ -367,6 +379,84 @@ inner_loop_end:
     j outer_loop_start
 
 outer_loop_end:
+    # Epilogue
+    lw s0 0(sp)
+    lw s1 4(sp)
+    lw s2 8(sp)
+    lw s3 12(sp)
+    lw s4 16(sp)
+    lw ra 20(sp)
+    addi sp sp 24
+
+    ret
+
+#================================================================
+# void compare_int_array(int a0, int* a0, int* a1, int a2)
+# Prints an integer array, with spaces between the elements
+# args:
+#   a0 is the base exit code that will be used if an unequal element is found
+#   a1 is the pointer to the expected data
+#   a2 is the pointer to the actual data
+#   a3 is the number of elements in each array
+#   a4 is the error message
+# return:
+#   void
+#================================================================
+compare_int_array:
+    # Prologue
+    addi sp sp -24
+    sw s0 0(sp)
+    sw s1 4(sp)
+    sw s2 8(sp)
+    sw s3 12(sp)
+    sw s4 16(sp)
+    sw ra 20(sp)
+
+    # save pointer to original array in s1
+    mv s1, a2
+
+    # t0: current element
+    mv t0 zero
+
+loop_start:
+    # we are done once t0 >= a3
+    bge t0, a3, end
+
+    # t1 := *a1
+    lw t1, 0(a1)
+    # t2 := *a2
+    lw t2, 0(a2)
+
+    # if the values are different -> fail
+    bne t1, t2, fail
+
+    # go to next value
+    addi t0, t0, 1
+    addi a1, a1, 4
+    addi a2, a2, 4
+    j loop_start
+
+fail:
+    # exit code: a0
+    mv s0, a0
+    # remember length
+    mv s2, a3
+
+    # print user supplied error message
+    mv a1, a4
+    jal print_str
+
+    # print actual data
+    mv a0, s1
+    li a1, 1
+    mv a2, s2
+    jal print_int_array
+
+    # exit with user defined error code
+    mv a1, s0
+    jal exit2
+
+end:
     # Epilogue
     lw s0 0(sp)
     lw s1 4(sp)

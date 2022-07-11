@@ -3,8 +3,6 @@
 .text
 # ==============================================================================
 # FUNCTION: Writes a matrix of integers into a binary file
-#   If any file operation fails or doesn't write the proper number of bytes,
-#   exit the program with exit code 1.
 # FILE FORMAT:
 #   The first 8 bytes of the file will be two 4 byte ints representing the
 #   numbers of rows and columns respectively. Every 4 bytes thereafter is an
@@ -16,13 +14,13 @@
 #   a3 (int)   is the number of columns in the matrix
 # Returns:
 #   None
-#
-# If you receive an fopen error or eof, 
-# this function exits with error code 53.
-# If you receive an fwrite error or eof,
-# this function exits with error code 54.
-# If you receive an fclose error or eof,
-# this function exits with error code 55.
+# Exceptions:
+# - If you receive an fopen error or eof,
+#   this function terminates the program with error code 89
+# - If you receive an fclose error or eof,
+#   this function terminates the program with error code 90
+# - If you receive an fwrite error or eof,
+#   this function terminates the program with error code 92
 # ==============================================================================
 write_matrix:
 

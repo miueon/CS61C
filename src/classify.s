@@ -8,17 +8,18 @@ classify:
     # Args:
     #   a0 (int)    argc
     #   a1 (char**) argv
-    #   a2 (int)    print_classification, if this is zero, 
+    #   a2 (int)    print_classification, if this is zero,
     #               you should print the classification. Otherwise,
     #               this function should not print ANYTHING.
     # Returns:
     #   a0 (int)    Classification
-    # 
-    # If there are an incorrect number of command line args,
-    # this function returns with exit code 49.
+    # Exceptions:
+    # - If there are an incorrect number of command line args,
+    #   this function terminates the program with exit code 72
+    # - If malloc fails, this function terminates the program with exit code 88
     #
     # Usage:
-    #   main.s -m -1 <M0_PATH> <M1_PATH> <INPUT_PATH> <OUTPUT_PATH>
+    #   main.s <M0_PATH> <M1_PATH> <INPUT_PATH> <OUTPUT_PATH>
 
 
 
@@ -74,7 +75,7 @@ classify:
 
 
 
-    
+
 
 
     # =====================================
@@ -95,7 +96,7 @@ classify:
 
 
     # Print classification
-    
+
 
 
 

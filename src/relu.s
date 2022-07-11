@@ -8,16 +8,16 @@
 #	a1 (int)  is the # of elements in the array
 # Returns:
 #	None
-#
-# If the length of the vector is less than 1, 
-# this function exits with error code 8.
+# Exceptions:
+# - If the length of the vector is less than 1,
+#   this function terminates the program with error code 57
 # ==============================================================================
 relu:
     # Prologue
 
 
 loop_start:
-    
+
 
 
 
@@ -34,5 +34,5 @@ loop_end:
 
     # Epilogue
 
-    
+
 	ret
