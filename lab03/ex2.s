@@ -37,8 +37,8 @@ main:
     sw s3, 12(sp)
     sw ra, 16(sp)
     # END PROLOGUE
-    addi t0, x0, 0
-    addi s0, x0, 0
+    addi t0, x0, 0 # k
+    addi s0, x0, 0 # sum
     la s1, source
     la s2, dest
 loop:
