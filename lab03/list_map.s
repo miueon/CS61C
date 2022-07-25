@@ -87,7 +87,7 @@ map:
     # The address of the next node is an attribute of the current node.
     # Think about how structs are organized in memory.
     ### YOUR CODE HERE ###
-    lw a0, 4(s0)
+    lw a0, 4(s1)
 
     # Put the address of the function back into a1 to prepare for the recursion
     # THINK: why a1? What about a0? -- a0
