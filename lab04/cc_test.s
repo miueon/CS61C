@@ -52,10 +52,9 @@ main:
 
 # Just a simple function. Returns 1.
 #
-# FIXME Fix the reported error in this function (you can delete lines
+# FIXED Fix the reported error in this function (you can delete lines
 # if necessary, as long as the function still returns 1 in a0).
 simple_fn:
-    mv a0, t0
     li a0, 1
     ret
 
@@ -71,11 +70,13 @@ simple_fn:
 #     return s0;
 # }
 #
-# FIXME There's a CC error with this function!
+# FIXED There's a CC error with this function!
 # The big all-caps comments should give you a hint about what's
 # missing. Another hint: what does the "s" in "s0" stand for?
 naive_pow:
     # BEGIN PROLOGUE
+    addi sp, sp, -4
+    sw s0, 0(sp)
     # END PROLOGUE
     li s0, 1
 naive_pow_loop:
@@ -86,6 +87,8 @@ naive_pow_loop:
 naive_pow_end:
     mv a0, s0
     # BEGIN EPILOGUE
+    lw s0, 0(sp)
+    addi sp, sp, 4 
     # END EPILOGUE
     ret
 
@@ -97,9 +100,11 @@ naive_pow_end:
 # address as argument and increments the 32-bit value stored there.
 inc_arr:
     # BEGIN PROLOGUE
-    # FIXME What other registers need to be saved?
-    addi sp, sp, -4
+    # FIXED What other registers need to be saved?
+    addi sp, sp, -20
     sw ra, 0(sp)
+    sw s0, 4(sp)
+    sw s1, 8(sp)
     # END PROLOGUE
     mv s0, a0 # Copy start of array to saved register
     mv s1, a1 # Copy length of array to saved register
@@ -110,18 +115,24 @@ inc_arr_loop:
     add a0, s0, t1 # Add offset to start of array
     # Prepare to call helper_fn
     #
-    # FIXME Add code to preserve the value in t0 before we call helper_fn
-    # Hint: What does the "t" in "t0" stand for?
+    # FIXED Add code to preserve the value in t0 before we call helper_fn
+    # Hint: What does the "t" in "t0" stand for? -- temporary
     # Also ask yourself this: why don't we need to preserve t1?
     #
+    sw t0, 12(sp)
+    sw t1, 16(sp)
     jal helper_fn
     # Finished call for helper_fn
+    lw t0, 12(sp)
+    lw t1, 16(sp)
     addi t0, t0, 1 # Increment counter
     j inc_arr_loop
 inc_arr_end:
     # BEGIN EPILOGUE
     lw ra, 0(sp)
-    addi sp, sp, 4
+    lw s0, 4(sp)
+    lw s1, 8(sp)
+    addi sp, sp, 20
     # END EPILOGUE
     ret
 
@@ -130,16 +141,21 @@ inc_arr_end:
 # C pseudocode for what it does: "*a0 = *a0 + 1"
 #
 # FIXME This function also violates calling convention, but it might not
-# be reported by the Venus CC checker (try and figure out why).
+# be reported by the Venus CC checker (try and figure out why). 
+# -- although s0 doesn't saved. but ??
 # You should fix the bug anyway by filling in the prologue and epilogue
 # as appropriate.
 helper_fn:
     # BEGIN PROLOGUE
+    addi sp, sp, -4
+    sw s0, 0(sp)
     # END PROLOGUE
     lw t1, 0(a0)
     addi s0, t1, 1
     sw s0, 0(a0)
     # BEGIN EPILOGUE
+    lw s0, 0(sp)
+    addi sp, sp, 4
     # END EPILOGUE
     ret
 
