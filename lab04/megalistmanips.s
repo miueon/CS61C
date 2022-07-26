@@ -66,27 +66,41 @@ map:
     # are modified by the callees, even when we know the content inside the functions 
     # we call. this is to enforce the abstraction barrier of calling convention.
 mapLoop:
-    add t1, s0, x0      # load the address of the array of current node into t1
+    # add t1, s0, x0      # load the address of the array of current node into t1
+    lw t1, 0(s0)        # mis.1 ptr -> ptr
     lw t2, 4(s0)        # load the size of the node's array into t2
 
-    add t1, t1, t0      # offset the array address by the count
+    # add t1, t1, t0      # offset the array address by the count
+    slli t3, t0, 2    # mis. 2
+    add t1, t1, t3
     lw a0, 0(t1)        # load the value at that address into a0
 
+    addi sp, sp, -12        # mis.3 caller should save the temporary reg.
+    sw t0, 0(sp)
+    sw t1, 4(sp)
+    sw t2, 8(sp)
     jalr s1             # call the function on that value.
+    lw t0, 0(sp)
+    lw t1, 4(sp)
+    lw t2, 8(sp)
+    addi sp, sp, 12
 
     sw a0, 0(t1)        # store the returned value back into the array
     addi t0, t0, 1      # increment the count
     bne t0, t2, mapLoop # repeat if we haven't reached the array size yet
 
-    la a0, 8(s0)        # load the address of the next node into a0
-    lw a1, 0(s1)        # put the address of the function back into a1 to prepare for the recursion
+    # la a0, 8(s0)
+    lw a0, 8(s0)        # load the address of the next node into a0 mis.4
+    # lw a1, 0(s1)
+    add a1, s1, x0        # put the address of the function back into a1 to prepare for the recursion mis.5
 
-    jal  map            # recurse
+    jal map            # recurse Not a mis. --not an error jal without a rd would target to ra as default.
 done:
     lw s0, 8(sp)
     lw s1, 4(sp)
     lw ra, 0(sp)
     addi sp, sp, 12
+    ret  # mis.6
 
 print_newline:
     li a1, '\n'
@@ -98,7 +112,7 @@ mystery:
     mul t1, a0, a0
     add a0, t1, a0
     jr ra
-
+# struckt node { int* arr, int size, struct node* next } 
 create_default_list:
     addi sp, sp, -24
     sw ra, 0(sp)
@@ -114,17 +128,17 @@ create_default_list:
 loop: #do...
     li a0, 12
     jal malloc      # get memory for the next node
-    mv s4, a0
+    mv s4, a0       # a0 now store the address point to the allocated mem
     li a0, 20
     jal  malloc     # get memory for this array
 
     sw a0, 0(s4)    # node->arr = malloc
-    lw a0, 0(s4)
+    lw a0, 0(s4)    # TODO why another read? will the sw inst. clear the reg?
     mv a1, s3
     jal fillArray   # copy ints over to node->arr
 
     sw s2, 4(s4)    # node->size = size (4)
-    sw  s0, 8(s4)   # node-> next = previously created node
+    sw s0, 8(s4)   # node-> next = previously created node
 
     add s0, x0, s4  # last = node
     addi s1, s1, 1  # i++
@@ -170,7 +184,7 @@ printLoop:
     li a0, 11  # prepare for print string ecall
     ecall
     addi t1, t1, 1
-  li t6 5
+    li t6 5
     bne t1, t6, printLoop # ... while i!= 5
     li a1, '\n'
     li a0, 11
@@ -178,7 +192,7 @@ printLoop:
     lw a0, 8(t0) # a0 gets address of next node
     j print_list # recurse. We don't have to use jal because we already have where we want to return to in ra
 
-malloc:
+malloc: # malloc(a0): <addr> 
     mv a1, a0 # Move a0 into a1 so that we can do the syscall correctly
     li a0, 9
     ecall
