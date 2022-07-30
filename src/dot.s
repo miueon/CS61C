@@ -28,7 +28,7 @@ dot:
     sw s4, 16(sp)
     sw s5, 20(sp) # counter for first array
     sw s6, 24(sp) # counter for sec array
-    sw s7, 28(sp)
+    sw s7, 28(sp) # counter 
 
     mv s0, a0 # pointer to the first array
     mv s1, a1 # pointer to the sec array

@@ -26,10 +26,22 @@
 matmul:
 
     # Error checks
-
-
+    ble a1, x0, height_width_invalid
+    ble a2, x0, height_width_invalid
+    ble a4, x0, height_width_invalid
+    ble a5, x0, height_width_invalid
+    bne a2, a4, widthA_heightB_uneuqal
+    j prologue
+height_width_invalid:
+    li a1, 59
+    call exit2
+widthA_heightB_uneuqal:
+    li a1, 59
+    call exit2
     # Prologue
-
+prologue:
+    addi sp, sp, 
+    sw s0, 
 
 outer_loop_start:
 
