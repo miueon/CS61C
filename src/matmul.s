@@ -40,16 +40,18 @@ widthA_heightB_uneuqal:
     call exit2
     # Prologue
 prologue:
-    addi sp, sp, 
-    sw s0, 0(sp) // outer_loop_counter
-    sw s1, 4(sp) // inner_loop_counter
-    sw s2, 8(sp) // m0 ptr 
-    sw s3, 12(sp) // m0 height 
-    sw s4, 16(sp) // m0 width 
-    sw s5, 20(sp) // m1 ptr
-    sw s6, 24(sp) // m1 height
-    sw s7, 28(sp) // m1 width
-    sw s8, 32(sp) // dest ptr
+    addi sp, sp, -44
+    sw s0, 0(sp) # outer_loop_counter
+    sw s1, 4(sp) # inner_loop_counter
+    sw s2, 8(sp) # m0 ptr 
+    sw s3, 12(sp) # m0 height 
+    sw s4, 16(sp) # m0 width 
+    sw s5, 20(sp) # m1 ptr
+    sw s6, 24(sp) # m1 height
+    sw s7, 28(sp) # m1 width
+    sw s8, 32(sp) # dest ptr
+    sw s9, 36(sp) # dest index
+    sw ra, 40(sp) # ret addr.
     mv s0, x0
     mv s1, x0
     mv s2, a0
@@ -59,27 +61,45 @@ prologue:
     mv s6, a4
     mv s7, a5
     mv s8, a6
+    mv s9, x0
 outer_loop_start:
-    bge s0, a1, outer_loop_end
+    bge s0, s3, outer_loop_end
 inner_loop_start:
-    bge s1, a5, inner_loop_end
+    bge s1, s7, inner_loop_end
     mul t0, s0, s4
-    slli t0, 2
-    add a0, s2, t0
-    mv t1, s1
-    slli t1, 2
-    add a1, s5, t1
-    call dot
-    
-
-
-
+    slli t0, t0, 2 # index for m0
+    add a0, s2, t0 # start ptr of m0 to dot func
+    mv t1, s1 
+    slli t1, t1, 2 # index for m1
+    add a1, s5, t1 # start ptr of m1 
+    add a2, x0, s4 # passing the argument to dot
+    addi a3, x0, 1 # stride for m0 is 1
+    mv a4, s4
+    mul s9, s0, s4 # dest index initiallize, cauze sx is the callee saved ptr. So it can save a lot of time 
+    add s9, s9, s1
+    slli s9, s9, 2
+    add s9, s9, s8 # compute the addr of dest
+    jal ra, dot
+    sw a0, 0(s9) # save dot result
+    addi s1, s1, 1
+    j inner_loop_start
 inner_loop_end:
-
-
+    addi s0, s0, 1
+    mv s1, x0
+    j outer_loop_start
 outer_loop_end:
-
-
+    lw s0, 0(sp) # outer_loop_counter
+    lw s1, 4(sp) # inner_loop_counter
+    lw s2, 8(sp) # m0 ptr 
+    lw s3, 12(sp) # m0 height 
+    lw s4, 16(sp) # m0 width 
+    lw s5, 20(sp) # m1 ptr
+    lw s6, 24(sp) # m1 height
+    lw s7, 28(sp) # m1 width
+    lw s8, 32(sp) # dest ptr
+    lw s9, 36(sp) # dest index
+    lw ra, 40(sp) # ret addr.
+    addi sp, sp, 44
     # Epilogue
 
 
