@@ -202,3 +202,13 @@ free_:
     addi sp, sp, 80
 
     ret
+
+
+# conlusions:
+# To debug, The venus should supply simulator defualt args
+# vmfs/inputs/simple0/bin/m0.bin vmfs/inputs/simple0/bin/m1.bin vmfs/inputs/simple0/bin/inputs/input0.bin vmfs/outputs/test_basic_main/studuent0.bin
+# 2. If the register is insufficient, then using the stack 
+# 3. ebreak bi-sec to find what go wrong. 
+# 4. the function should make sure the callee saved register is saved correctly -- The abstract barrier
+# 5. If no idea about what to do next, may be write the function in C is a good start
+# 6. 
