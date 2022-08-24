@@ -105,12 +105,11 @@ classify:
     beq a0, x0, malloc_failed
     mv s5, a0
 
-    # 1. mat_mul
-    mv a0, s4
+    # 1. mat_mul 
+    lw a0, 0(s4)
     lw a1, 4(s4)
     lw a2, 8(s4)
-    mv a3, s4
-    addi a3, a3, 24
+    lw a3, 24(s4)
     lw a4, 28(s4)
     lw a5, 32(s4)
     mv a6, s5
@@ -132,8 +131,7 @@ classify:
     mv s7, a0
 
     # 3. comput o
-    mv a0, s4
-    addi a0, a0, 12
+    lw a0, 12(s4)
     lw a1, 16(s4)
     lw a2, 20(s4)
     mv a3, s5

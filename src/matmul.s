@@ -101,6 +101,4 @@ outer_loop_end:
     lw ra, 40(sp) # ret addr.
     addi sp, sp, 44
     # Epilogue
-
-
     ret
