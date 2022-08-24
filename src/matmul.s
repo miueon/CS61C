@@ -75,7 +75,7 @@ inner_loop_start:
     add a2, x0, s4 # passing the argument to dot
     addi a3, x0, 1 # stride for m0 is 1
     mv a4, s4
-    mul s9, s0, s4 # dest index initiallize, cauze sx is the callee saved ptr. So it can save a lot of time 
+    mul s9, s0, s7 # dest index initiallize, cauze sx is the callee saved ptr. So it can save a lot of time 
     add s9, s9, s1
     slli s9, s9, 2
     add s9, s9, s8 # compute the addr of dest

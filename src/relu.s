@@ -29,7 +29,6 @@ loop_start:
     slli t0, s2, 2
     add t2, s0, t0
     lw t1, 0(t2)
-    ebreak
     bgt t1, x0, loop_continue
     add t1, x0, x0
     sw t1, 0(t2)
