@@ -106,6 +106,7 @@ classify:
     mv s5, a0
 
     # 1. mat_mul 
+    ebreak # check read matrix correct
     lw a0, 0(s4)
     lw a1, 4(s4)
     lw a2, 8(s4)
@@ -114,6 +115,7 @@ classify:
     lw a5, 32(s4)
     mv a6, s5
     jal matmul
+    ebreak # check h
 
     # 2. relu
     mv a0, s5
@@ -139,6 +141,7 @@ classify:
     lw a5, 32(s4)
     mv a6, s7
     jal matmul
+    ebreak # check o
 
     # =====================================
     # WRITE OUTPUT

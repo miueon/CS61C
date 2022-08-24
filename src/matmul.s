@@ -74,11 +74,12 @@ inner_loop_start:
     add a1, s5, t1 # start ptr of m1 
     add a2, x0, s4 # passing the argument to dot
     addi a3, x0, 1 # stride for m0 is 1
-    mv a4, s4
+    mv a4, s7 # !!! the stride should be the width of current matrix
     mul s9, s0, s7 # dest index initiallize, cauze sx is the callee saved ptr. So it can save a lot of time 
     add s9, s9, s1
     slli s9, s9, 2
     add s9, s9, s8 # compute the addr of dest
+    ebreak # check the dot argument is correct
     jal ra, dot
     sw a0, 0(s9) # save dot result
     addi s1, s1, 1

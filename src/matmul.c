@@ -6,7 +6,7 @@ void mat_mul(int *A, int A_w, int A_h, int *B, int B_w, int B_h, int *C) {
         int* a = A + t0;
         int* b = B + j;
         int t3 =i*B_w + j;
-        C[t3] = dot(a, b, 1, B_w, A_w);
+        C[t3] = dot(a, b, A_w, B_w, A_w);
     }
   }
 }
