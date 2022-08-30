@@ -54,7 +54,7 @@ class TestCase():
     try:
       self.fix_circ()
 
-      proc = subprocess.Popen(["java", "-jar", logisim_path, "-tty", "table,binary,tabs", self.get_circ_path()], stdout=subprocess.PIPE)
+      proc = subprocess.Popen(["/home/yuion/.jdks/temurin-17.0.4/bin/java", "-jar", logisim_path, "-tty", "table,binary,tabs", self.get_circ_path()], stdout=subprocess.PIPE)
 
       with open(self.get_expected_table_path(), "r") as reference:
         passed = self.check_output(proc.stdout, reference)
