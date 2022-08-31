@@ -197,7 +197,7 @@ class TestCase():
     passed = False
     proc = None
     try:
-      proc = subprocess.Popen(["java", "-jar", str(logisim_path), "-tty", "table,binary,csv", str(self.circ_path)], stdout=subprocess.PIPE, encoding="utf-8", errors="ignore")
+      proc = subprocess.Popen(["/home/yuion/.jdks/temurin-17.0.4/bin/java", "-jar", str(logisim_path), "-tty", "table,binary,csv", str(self.circ_path)], stdout=subprocess.PIPE, encoding="utf-8", errors="ignore")
 
       with self.get_expected_table_path(pipelined=pipelined).open("r", encoding="utf-8", errors="ignore") as expected_file:
         passed = self.check_output(proc.stdout, expected_file)
