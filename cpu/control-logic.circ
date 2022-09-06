@@ -626,8 +626,9 @@
       <a name="addrWidth" val="6"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 6 16
-12*0 8400 8400 8400 8404 8424 8444 8484
-84a4 85a4 84c4 84e4
+8604 8704 8784 8624 8724 8764 8644 8684
+86a4 87a4 86c4 86e4 8400 8400 8400 8404
+8424 8444 8484 84a4 85a4 84c4 84e4
 </a>
       <a name="dataWidth" val="16"/>
     </comp>
