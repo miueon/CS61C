@@ -15,4 +15,4 @@ Look ma, I made a CPU! Here's what I did:
     - To re-use the common circuit, you need an ALU 
     - Then every thing else build upon it in order to feed in data and get data.
 
-
+- CPU also just a bunch of `functions` nothing more

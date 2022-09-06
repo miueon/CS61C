@@ -160,6 +160,26 @@
     <comp lib="0" loc="(220,310)" name="Tunnel">
       <a name="label" val="BrUn"/>
     </comp>
+    <comp lib="0" loc="(330,160)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="rs1"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(390,180)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="rs2"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(600,200)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="BrUn"/>
+    </comp>
+    <comp lib="0" loc="(660,150)" name="Tunnel">
+      <a name="label" val="BrEq"/>
+    </comp>
+    <comp lib="0" loc="(660,260)" name="Tunnel">
+      <a name="label" val="BrLt"/>
+    </comp>
     <comp lib="0" loc="(930,130)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="BrEq"/>
@@ -178,8 +198,30 @@
       <a name="label" val="BrLt"/>
       <a name="output" val="true"/>
     </comp>
+    <comp lib="2" loc="(630,150)" name="Multiplexer">
+      <a name="enable" val="false"/>
+    </comp>
+    <comp lib="2" loc="(630,260)" name="Multiplexer">
+      <a name="enable" val="false"/>
+      <a name="selloc" val="tr"/>
+    </comp>
+    <comp lib="3" loc="(460,170)" name="Comparator">
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="3" loc="(460,260)" name="Comparator">
+      <a name="mode" val="unsigned"/>
+      <a name="width" val="32"/>
+    </comp>
     <comp lib="5" loc="(156,94)" name="Text">
       <a name="text" val="INPUTS to your circuit"/>
+    </comp>
+    <comp lib="5" loc="(422,142)" name="Text">
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="text" val="Signed comparison"/>
+    </comp>
+    <comp lib="5" loc="(437,300)" name="Text">
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="text" val="Unsigned comparison"/>
     </comp>
     <comp lib="5" loc="(562,43)" name="Text">
       <a name="text" val="DON'T CHANGE THE LOCATIONS OF THE INPUTS AND OUTPUTS!"/>
@@ -195,6 +237,29 @@
     <wire from="(220,180)" to="(220,230)"/>
     <wire from="(220,270)" to="(220,290)"/>
     <wire from="(220,330)" to="(220,340)"/>
+    <wire from="(330,160)" to="(340,160)"/>
+    <wire from="(340,160)" to="(340,250)"/>
+    <wire from="(340,160)" to="(420,160)"/>
+    <wire from="(340,250)" to="(420,250)"/>
+    <wire from="(390,180)" to="(400,180)"/>
+    <wire from="(400,180)" to="(400,270)"/>
+    <wire from="(400,180)" to="(420,180)"/>
+    <wire from="(400,270)" to="(420,270)"/>
+    <wire from="(460,170)" to="(480,170)"/>
+    <wire from="(460,180)" to="(540,180)"/>
+    <wire from="(460,260)" to="(490,260)"/>
+    <wire from="(460,270)" to="(600,270)"/>
+    <wire from="(480,140)" to="(480,170)"/>
+    <wire from="(480,140)" to="(600,140)"/>
+    <wire from="(490,160)" to="(490,260)"/>
+    <wire from="(490,160)" to="(600,160)"/>
+    <wire from="(540,180)" to="(540,250)"/>
+    <wire from="(540,250)" to="(600,250)"/>
+    <wire from="(600,200)" to="(610,200)"/>
+    <wire from="(610,170)" to="(610,200)"/>
+    <wire from="(610,200)" to="(610,240)"/>
+    <wire from="(630,150)" to="(660,150)"/>
+    <wire from="(630,260)" to="(660,260)"/>
     <wire from="(80,100)" to="(220,100)"/>
     <wire from="(80,100)" to="(80,340)"/>
     <wire from="(80,340)" to="(220,340)"/>
