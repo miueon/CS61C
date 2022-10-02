@@ -46,7 +46,7 @@ void multMat4( int n, float *A, float *B, float *C ) {
     for( j = 0; j < n; j++ )
         for( k = 0; k < n; k++ )
             for( i = 0; i < n; i++ )
-                C[i+j*n] += A[i+k*n]*B[k+j*n];
+                C[i+j*n] += A[i+k*n]*B[k+j*n]; // A: 1, B:0, C:1
 }
 
 void multMat5( int n, float *A, float *B, float *C ) {
@@ -55,7 +55,7 @@ void multMat5( int n, float *A, float *B, float *C ) {
     for( k = 0; k < n; k++ )
         for( i = 0; i < n; i++ )
             for( j = 0; j < n; j++ )
-                C[i+j*n] += A[i+k*n]*B[k+j*n];
+                C[i+j*n] += A[i+k*n]*B[k+j*n]; // 
 }
 
 void multMat6( int n, float *A, float *B, float *C ) {
