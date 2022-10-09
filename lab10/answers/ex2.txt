@@ -1,0 +1,8 @@
+v_add:
+    result:
+        Optimized adjacent: 15 thread(s) took 0.472001 seconds
+        Optimized adjacent: 16 thread(s) took 0.533594 seconds
+        Optimized chunks: 15 thread(s) took 0.287534 seconds
+        Optimized chunks: 16 thread(s) took 0.302391 seconds
+    - As each thread has it own L1 data cache, thus the block version has better locality.
+
