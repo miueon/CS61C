@@ -21,8 +21,8 @@ int main(int argc, char* argv[]) {
     printf("Sum: %lld\n", reference);
     clock_t reft = end - start;
 
-    printf("Starting randomized unrolled sum.\n");
-    printf("Sum: %lld\n", sum_unrolled(vals));
+    // printf("Starting randomized unrolled sum.\n");
+    // printf("Sum: %lld\n", sum_unrolled(vals));
 
     printf("Starting randomized SIMD sum.\n");
     start = clock();
