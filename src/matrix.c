@@ -156,6 +156,23 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
     // 6. Increment the `ref_cnt` field of the `from` struct by 1.
     // 7. Store the address of the allocated matrix struct at the location `mat` is pointing at.
     // 8. Return 0 upon success.
+    if (rows < 1 || cols < 1) {
+        return -1;
+    }
+
+    matrix* new_mat = malloc(sizeof(matrix));
+    if (new_mat == NULL) {
+        return -2;
+    }
+
+    new_mat->data = from->data + offset;
+    new_mat->cols = cols;
+    new_mat->rows = rows;
+    new_mat->parent = from;
+
+    from->ref_cnt += 1;
+    *mat = new_mat;
+    return 0;
 }
 
 /*
@@ -163,6 +180,11 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
  */
 void fill_matrix(matrix *mat, double val) {
     // Task 1.5 TODO
+    for (int i = 0; i < mat->rows; i++) {
+        for (int j = 0; j < mat->cols; j++) {
+            mat->data[j + i * mat->cols] = val;
+        }
+    }
 }
 
 /*
@@ -172,6 +194,17 @@ void fill_matrix(matrix *mat, double val) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
+    if (result->cols != mat->cols || result->rows != mat->cols) {
+        return -1;
+    }
+    for (int i = 0; i < mat->rows; i++) {
+        for (int j = 0; j < mat->cols; j++) {
+            int index = j + i * mat->cols;
+            int val = mat->data[index];
+            result->data[index] = val < 0? -val:val;
+        }
+    }
+    return 0;
 }
 
 /*
@@ -182,6 +215,17 @@ int abs_matrix(matrix *result, matrix *mat) {
  */
 int neg_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
+    if (result->cols != mat->cols || result->rows != mat->cols) {
+        return -1;
+    }
+
+    for (int i = 0; i < mat->rows; i++) {
+        for (int j = 0; j < mat->cols; j++) {
+            int index = j + i * mat->cols;
+            result->data[index] = -mat->data[index];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -192,6 +236,17 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.5 TODO
+    if (result->cols != mat1->cols || result->rows != mat1->cols) {
+        return -1;
+    }
+
+    for (int i = 0; i < mat1->rows; i++) {
+        for (int j = 0; j < mat1->cols; j++) {
+            int index = j + i * mat1->cols;
+            result->data[index] = mat1->data[index] + mat2->data[index];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -203,6 +258,17 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.5 TODO
+    if (result->cols != mat1->cols || result->rows != mat1->cols) {
+        return -1;
+    }
+
+    for (int i = 0; i < mat1->rows; i++) {
+        for (int j = 0; j < mat1->cols; j++) {
+            int index = j + i * mat1->cols;
+            result->data[index] = mat1->data[index] - mat2->data[index];
+        }
+    }
+    return 0;
 }
 
 /*
@@ -214,6 +280,24 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
+    if (result->cols != mat2->cols || result->rows != mat1->rows) {
+        return -1;
+    }
+
+    double* tmp = calloc(result->cols*result->rows, sizeof(double));
+    for (int i = 0; i < result->rows; i++) {
+        for (int j = 0; j < result->cols; j++) {
+            int index = j + i * result->cols;
+            for (int k = 0; k < mat1->cols; k++) {
+                tmp[index] += mat1->data[k + i*mat1->cols] * mat2->data[j + k*mat2->cols];
+            }
+        }
+    }
+    for (int i =0; i < result->cols*result->rows; i++) {
+        result->data[i] = tmp[i];
+    }
+    free(tmp);
+    return 0;
 }
 
 /*
@@ -224,5 +308,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Note that the matrix is in row-major order.
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
-    // Task 1.6 TODO
+    if (pow == 0) {
+        fill_matrix(result, 1);
+        return 0;
+    }
+
+    if (pow == 1) {
+        fill_matrix(result, 0);
+        add_matrix(result, result, mat);
+        return 0;
+    }
+
+    mul_matrix(result, mat, mat);
+    for (int i = 2; i<pow; i++) {
+        mul_matrix(result, result, mat);
+    }
+
+    return 0;
 }
